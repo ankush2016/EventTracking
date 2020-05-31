@@ -1,7 +1,5 @@
-package com.tools.eventtrackinglib.viewmodel
+package com.tools.eventtrackinglib
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.tools.eventtrackinglib.api.DestinationService
@@ -12,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class EventTrackingViewModel(application: Application) : AndroidViewModel(application) {
+class EventLogging {
 
     fun logEvent(appId: String, eventName: String, subeventName: String?): LiveData<StatusResponse> {
         val statusResponse = MutableLiveData<StatusResponse>()
@@ -31,5 +29,4 @@ class EventTrackingViewModel(application: Application) : AndroidViewModel(applic
         })
         return statusResponse
     }
-
 }
