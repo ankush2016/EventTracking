@@ -7,22 +7,26 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import com.tools.eventtrackinglib.R
+import com.tools.eventtrackinglib.model.RatingModel
+import kotlinx.android.synthetic.main.et_custom_alert_dialog_layout.view.*
 
 
 object Utils {
 
-    fun userActionPerformed(context: Context, rulesList: ArrayList<Int>) {
+    fun userActionPerformed(context: Context, ratingModel: RatingModel) {
         val userActionPerformedCount = getIntFromSharedPrefs(context, ETConstants.USER_ACTION_PERFORMED_KEY, 0, ETConstants.PREF_NAME)
         saveIntInSharedPrefs(context, ETConstants.USER_ACTION_PERFORMED_KEY, userActionPerformedCount + 1, ETConstants.PREF_NAME)
         Log.e("ANKUSH", "userActionPerformedCount = ${userActionPerformedCount + 1}")
-        if (rulesList.contains(userActionPerformedCount)) {
+        if (ratingModel.rulesList.contains(userActionPerformedCount)) {
             //Show Rate Us
-            showRateUsAlertDialog(context)
+            showRateUsAlertDialog(context, ratingModel)
         }
     }
 
-    private fun showRateUsAlertDialog(context: Context) {
+    private fun showRateUsAlertDialog(context: Context, ratingModel: RatingModel) {
         val dialogView: View = LayoutInflater.from(context).inflate(R.layout.et_custom_alert_dialog_layout, null)
+        ratingModel.headerText?.let { dialogView.tvQuestion.text = it }
+        ratingModel.descriptionText?.let { dialogView.tvSubDescription.text = it }
         val builder: AlertDialog.Builder = AlertDialog.Builder(context)
         builder.setView(dialogView)
         val alertDialog: AlertDialog = builder.create()
