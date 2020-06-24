@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.et_thanks_dialog_layout.view.*
 object Utils {
 
     fun userActionPerformed(context: Context, ratingModel: RatingModel) {
+        val isAppRated = getBooleanFromSharedPrefs(context, ETConstants.APP_RATED_KEY, false, ETConstants.PREF_NAME)
+        if (isAppRated) return
         val userActionPerformedCount = getIntFromSharedPrefs(context, ETConstants.USER_ACTION_PERFORMED_KEY, 0, ETConstants.PREF_NAME)
         saveIntInSharedPrefs(context, ETConstants.USER_ACTION_PERFORMED_KEY, userActionPerformedCount + 1, ETConstants.PREF_NAME)
         Log.e("ANKUSH", "userActionPerformedCount = ${userActionPerformedCount + 1}")
@@ -61,6 +63,7 @@ object Utils {
         dialogView.tvCancel.setOnClickListener { alertDialog.dismiss() }
         dialogView.tvRateApp.setOnClickListener {
             alertDialog.dismiss()
+            saveBooleanInSharedPrefs(context, ETConstants.APP_RATED_KEY, true, ETConstants.PREF_NAME)
             val appPackageName = ratingModel.applicationId
             try {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
@@ -79,5 +82,16 @@ object Utils {
     fun getIntFromSharedPrefs(context: Context, key: String, defaultValue: Int, prefName: String): Int {
         val prefs: SharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
         return prefs.getInt(key, defaultValue)
+    }
+
+    fun saveBooleanInSharedPrefs(context: Context, key: String, value: Boolean, prefName: String) {
+        val editor: SharedPreferences.Editor = context.getSharedPreferences(prefName, Context.MODE_PRIVATE).edit()
+        editor.putBoolean(key, value)
+        editor.apply()
+    }
+
+    fun getBooleanFromSharedPrefs(context: Context, key: String, defaultValue: Boolean, prefName: String): Boolean {
+        val prefs: SharedPreferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE)
+        return prefs.getBoolean(key, defaultValue)
     }
 }
