@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.tools.eventtrackinglib.EventLogging
 import com.tools.eventtrackinglib.R
 import com.tools.eventtrackinglib.model.RatingModel
 import kotlinx.android.synthetic.main.et_custom_alert_dialog_layout.view.*
@@ -26,6 +27,7 @@ object Utils {
         Log.e("ANKUSH", "userActionPerformedCount = ${userActionPerformedCount + 1}")
         if (ratingModel.rulesList.contains(userActionPerformedCount)) {
             //Show Rate Us
+            logEvent(ratingModel.applicationId, ETConstants.EVENT_RATE_US_SHOWN, null)
             showRateUsAlertDialog(context, ratingModel)
         }
     }
@@ -64,6 +66,7 @@ object Utils {
         dialogView.tvRateApp.setOnClickListener {
             alertDialog.dismiss()
             saveBooleanInSharedPrefs(context, ETConstants.APP_RATED_KEY, true, ETConstants.PREF_NAME)
+            logEvent(ratingModel.applicationId, ETConstants.EVENT_RATE_US, null)
             val appPackageName = ratingModel.applicationId
             try {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
@@ -71,6 +74,11 @@ object Utils {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
             }
         }
+    }
+
+    private fun logEvent(applicationId: String, eventName: String, subEventName: String?) {
+        val eventLogging = EventLogging()
+        eventLogging.logEvent(applicationId, eventName, subEventName)
     }
 
     fun saveIntInSharedPrefs(context: Context, key: String, value: Int, prefName: String) {
