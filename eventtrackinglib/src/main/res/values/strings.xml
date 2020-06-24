@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="et_rating_sub_description">From 1 (very unlikely) to 5 (extremely likely)</string>
+</resources>
