@@ -60,6 +60,7 @@ object Utils {
         ratingModel.thanksDialogSubtitle?.let { dialogView.tvThanksSubtitle.text = it }
         dialogView.tvCancel.setOnClickListener { alertDialog.dismiss() }
         dialogView.tvRateApp.setOnClickListener {
+            alertDialog.dismiss()
             val appPackageName = ratingModel.applicationId
             try {
                 context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
